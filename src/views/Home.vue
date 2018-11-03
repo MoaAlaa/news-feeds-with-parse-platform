@@ -3,7 +3,7 @@
 	   <b-row class="mb-3" v-for="feed in feeds" :key="feed.id">
             <b-col cols="2"></b-col>   
             <b-col cols="8" >
-                <b-card :header="feed.attributes.title" >
+                <b-card :header="feed.attributes.title" :footer="getPropperDate(feed.attributes.createdAt)">
                     {{ feed.attributes.body }}
                 </b-card>
             </b-col>
@@ -16,30 +16,43 @@ export default {
   name: 'home',
   data() {
     return {
-      feeds: []
+	  feeds: [],
+	  query: {},
+	  subscription: {},
     };
   },
   mounted() {
-    this.fetchFeeds();
+	this.query = new Parse.Query('NewsFeed');
+	this.subscription = this.query.subscribe();
+	this.fetchFeeds();
+	this.loadNewFeeds();
   },
   methods: {
     fetchFeeds() {
-        const NewsFeed = Parse.Object.extend('NewsFeed');
+      this.query.descending('timestamp').find()
+        .then(data => {
+          this.feeds = data.map(d => {
+            return {
+              id: d.id,
+              attributes: d.attributes,
+            };
+          });                
+      });
+	},
+	loadNewFeeds() {
 
-		const query = new Parse.Query(NewsFeed);
-
-		query.descending('timestamp').find()
-			.then(data => {
-				this.feeds = data.map(d => {
-					return {
-						id: d.id,
-						attributes: d.attributes,
-					};
-				});	
-				console.log(data);
-							
-			});
-    }
+		this.subscription.on('create', feed => {
+			this.feeds.unshift({
+				id: feed.id,
+				attributes: feed.attributes,
+			})
+			
+		});
+		
+	},
+	getPropperDate(date) {
+		return this.$moment(date).fromNow();
+	}
   }
 }
 </script>

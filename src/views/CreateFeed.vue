@@ -41,7 +41,6 @@ export default {
 
             newsFeed.set('title', this.feed.title);
             newsFeed.set('body', this.feed.body);
-            newsFeed.set('timestamp', new Date().getTime() / 1000); // get time in seconds
 
             newsFeed.save()
             .then(data => {
