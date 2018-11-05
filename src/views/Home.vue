@@ -22,10 +22,10 @@ export default {
     };
   },
   mounted() {
-	this.query = new Parse.Query('NewsFeed');
-	this.subscription = this.query.subscribe();
-	this.fetchFeeds();
-	this.loadNewFeeds();
+    this.query = new Parse.Query('NewsFeed');
+    this.subscription = this.query.subscribe();
+    this.fetchFeeds();
+    this.loadNewFeeds();
   },
   methods: {
     fetchFeeds() {

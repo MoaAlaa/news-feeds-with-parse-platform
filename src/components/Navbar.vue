@@ -9,7 +9,8 @@
 
             <b-navbar-nav>
                 <b-nav-item to="/" key="feeds" exact>Feeds</b-nav-item>
-                <b-nav-item to="create-feed" key="create-feed">Create Feed</b-nav-item>
+                <b-nav-item to="create-feed" key="create-feed" v-if="isAuth() && userCanWrite('feed-editor')" >Create Feed</b-nav-item>
+                <b-nav-item to="create-roles" key="create-roles" v-if="isAuth() && userCanWrite('role-editor')" >Create Roles</b-nav-item>
             </b-navbar-nav>
 
             <!-- Right aligned nav items -->

@@ -18,9 +18,14 @@ Vue.config.productionTip = false
 
 Vue.prototype.$moment = (date) => moment(date);
 
-Vue.prototype.user = () => Parse.User.current();
+const user = () => Parse.User.current();
+
+Vue.prototype.user = user;
 Vue.prototype.isAuth = () => !! Parse.User.current();
 Vue.prototype.isGuest = () => ! Parse.User.current();
+Vue.prototype.userCanRead = (role) => user().getACL().getRoleReadAccess(role);
+Vue.prototype.userCanWrite = (role) => user().getACL().getRoleWriteAccess(role);
+
 
 new Vue({
   router,
